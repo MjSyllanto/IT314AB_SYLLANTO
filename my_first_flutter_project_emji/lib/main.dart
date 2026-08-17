@@ -11,9 +11,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       home: Scaffold(
         backgroundColor: Colors.lightBlue[50],
 
+        // =========================
+        // APP BAR
+        // =========================
         appBar: AppBar(
           backgroundColor: Colors.lightBlue,
           title: const Text(
@@ -24,101 +28,191 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        body: Center(
-          child: Card(
-            margin: const EdgeInsets.all(25),
-            elevation: 8,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
+        // =========================
+        // FLAG 9: STACK THE CARDS
+        // =========================
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22),
 
-            child: Padding(
-              padding: const EdgeInsets.all(30),
+            // Column arranges the two Cards vertically
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
 
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+                // =========================
+                // CARD 1: PROFILE
+                // =========================
+                Card(
+                  color: Colors.white.withOpacity(0.3),
+                  elevation: 0,
 
-                  // Heart icon
-                  const Icon(
-                    Icons.favorite,
-                    size: 70,
-                    color: Colors.lightBlue,
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Circular profile picture
-                  Container(
-                    width: 160,
-                    height: 160,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.lightBlue,
-                        width: 5,
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      16,
+                      16,
+                      16,
+                      0,
                     ),
 
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/dog.webp',
-                        width: 150,
-                        height: 150,
-                        fit: BoxFit.cover,
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        Image.asset(
+                          'assets/dog.webp',
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        const Text(
+                          'Mary Jocelyn Syllanto',
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        const Text(
+                          'BSIT 3',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        const Text(
+                          'My First Flutter Application',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        const Text(
+                          'August 17, 2026',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        const Text(
+                          'Hobby: Sleeping',
+                          style: TextStyle(
+                            fontSize: 23,
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Age: 22',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+
+                            SizedBox(width: 25),
+
+                            Text(
+                              'Birthdate: February 24, 2004',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
+                ),
 
-                  const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-                  // Name
-                  const Text(
-                    'Mary Jocelyn Syllanto',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.lightBlue,
+                // =========================
+                // CARD 2: MY FAVORITES
+                // =========================
+                Card(
+                  color: Colors.white.withOpacity(0.3),
+                  elevation: 0,
+
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+
+                    child: Column(
+                      children: [
+                        // Favorite Icon
+                        const Icon(
+                          Icons.flag_circle_rounded,
+                          size: 25,
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        // My Favorites
+                        const Text(
+                          'My Favorites',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        // Game and Movie
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Game: Valorant',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+
+                            SizedBox(width: 15),
+
+                            Text(
+                              'Movie: Spiderman',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        // Color
+                        const Text(
+                          'Color: Black',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                ),
 
-                  const SizedBox(height: 10),
-
-                  // Course
-                  const Text(
-                    'BSIT 3',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Application title
-                  const Text(
-                    'My First Flutter Application',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  // Date
-                  const Text(
-                    'August 11, 2026',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                ],
-              ),
+                const SizedBox(height: 20),
+              ],
             ),
           ),
         ),
