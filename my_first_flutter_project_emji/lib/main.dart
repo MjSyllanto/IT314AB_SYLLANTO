@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +15,10 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.lightBlue[50],
 
-        // =========================
         // APP BAR
-        // =========================
         appBar: AppBar(
           backgroundColor: Colors.lightBlue,
-          title: const Text(
+          title: Text(
             'My First Flutter Application',
             style: TextStyle(
               color: Colors.white,
@@ -28,28 +26,26 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        // =========================
-        // FLAG 9: STACK THE CARDS
-        // =========================
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22),
+            padding: EdgeInsets.symmetric(horizontal: 22),
 
             // Column arranges the two Cards vertically
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
+
               children: [
 
                 // =========================
                 // CARD 1: PROFILE
                 // =========================
                 Card(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.lightBlue.withOpacity(0.3),
                   elevation: 0,
 
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
+                    padding: EdgeInsets.fromLTRB(
                       16,
                       16,
                       16,
@@ -60,16 +56,31 @@ class MyApp extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
 
-                        Image.asset(
-                          'assets/dog.webp',
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
+                        // Circular Avatar
+                        Container(
+                          width: 160,
+                          height: 160,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.lightBlue,
+                              width: 5,
+                            ),
+                          ),
+
+                          child: ClipOval(
+                            child: Image.asset(
+                              'assets/dog.webp',
+                              width: 150,
+                              height: 150,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
 
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
-                        const Text(
+                        Text(
                           'Mary Jocelyn Syllanto',
                           style: TextStyle(
                             fontSize: 23,
@@ -77,49 +88,50 @@ class MyApp extends StatelessWidget {
                           ),
                         ),
 
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
-                        const Text(
+                        Text(
                           'BSIT 3',
                           style: TextStyle(
                             fontSize: 18,
                           ),
                         ),
 
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
-                        const Text(
+                        Text(
                           'My First Flutter Application',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontStyle: FontStyle.italic,
                           ),
                         ),
 
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
-                        const Text(
+                        Text(
                           'August 17, 2026',
                           style: TextStyle(
-                            fontSize: 17,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
 
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
-                        const Text(
+                        Text(
                           'Hobby: Sleeping',
                           style: TextStyle(
-                            fontSize: 23,
+                            fontSize: 15,
                           ),
                         ),
 
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+
                             Text(
                               'Age: 22',
                               style: TextStyle(
@@ -142,30 +154,31 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // =========================
                 // CARD 2: MY FAVORITES
                 // =========================
                 Card(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.lightBlue.withOpacity(0.3),
                   elevation: 0,
 
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16),
 
                     child: Column(
                       children: [
+
                         // Favorite Icon
-                        const Icon(
-                          Icons.flag_circle_rounded,
+                        Icon(
+                          Icons.favorite,
                           size: 25,
                         ),
 
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
                         // My Favorites
-                        const Text(
+                        Text(
                           'My Favorites',
                           style: TextStyle(
                             fontSize: 22,
@@ -173,12 +186,13 @@ class MyApp extends StatelessWidget {
                           ),
                         ),
 
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
                         // Game and Movie
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+
                             Text(
                               'Game: Valorant',
                               style: TextStyle(
@@ -197,13 +211,15 @@ class MyApp extends StatelessWidget {
                           ],
                         ),
 
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
-                        // Color
-                        const Text(
-                          'Color: Black',
-                          style: TextStyle(
-                            fontSize: 15,
+                        // FLAG 10: CHIP WIDGET
+                        Chip(
+                          label: Text(
+                            'Color: Black',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       ],
@@ -211,7 +227,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
               ],
             ),
           ),
