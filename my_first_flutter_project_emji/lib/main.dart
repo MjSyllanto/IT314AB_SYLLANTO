@@ -11,116 +11,187 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.lightBlue[50],
+      title: 'My First Flutter Project',
+      home: const ProfilePage(),
+    );
+  }
+}
 
-        appBar: AppBar(
-          backgroundColor: Colors.lightBlue,
-          title: const Text(
-            'My First Flutter Application',
-            style: TextStyle(
-              color: Colors.white,
+// PROFILE DATA
+class Profile {
+  final String image;
+  final String? name;
+  final String? courseSection;
+  final int? age;
+  final String? hobby;
+
+  const Profile({
+    required this.image,
+    this.name,
+    this.courseSection,
+    this.age,
+    this.hobby,
+  });
+}
+
+// FIVE DIFFERENT PROFILES
+const List<Profile> profiles = [
+  // PROFILE 1 - COMPLETE DATA
+  Profile(
+    image: 'assets/emji.jpg',
+    name: 'Emji Silento',
+    courseSection: 'BSIT-3',
+    age: 20,
+    hobby: 'Drinking Secret',
+  ),
+
+  // PROFILE 2 - EMPTY HOBBY
+  Profile(
+    image: 'assets/marianne.jpg',
+    name: 'Maryan Gridwan',
+    courseSection: 'BSIT-3',
+    age: 21,
+    hobby: '',
+  ),
+
+  // PROFILE 3 - NULL COURSE
+  Profile(
+    image: 'assets/mav1.jpg',
+    name: 'Mav Sumalangitka',
+    courseSection: null,
+    age: 19,
+    hobby: 'Dancing',
+  ),
+
+  // PROFILE 4 - NOT PROVIDED
+  Profile(
+    image: 'assets/chim.PNG',
+    name: 'Chim Boop',
+    courseSection: 'Not provided',
+    age: 20,
+    hobby: 'Hobby Tanan',
+  ),
+
+  // PROFILE 5 - MISSING HOBBY
+  Profile(
+    image: 'assets/krylle.PNG',
+    name: 'Karylle Buta',
+    courseSection: 'BSIS-3',
+    age: 21,
+    hobby: null,
+  ),
+];
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My First Flutter Project'),
+        centerTitle: true,
+      ),
+
+      // SCROLLING WIDGET
+      body: ListView.builder(
+        padding: const EdgeInsets.all(20),
+        itemCount: profiles.length,
+        itemBuilder: (context, index) {
+          final profile = profiles[index];
+
+          return ProfileCard(profile: profile);
+        },
+      ),
+    );
+  }
+}
+
+// SAME DESIGN FOR ALL PROFILES
+class ProfileCard extends StatelessWidget {
+  final Profile profile;
+
+  const ProfileCard({
+    super.key,
+    required this.profile,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      color: Colors.white,
+      margin: const EdgeInsets.only(bottom: 20),
+
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+
+        child: Column(
+          children: [
+            // IMAGE
+            Image.asset(
+              profile.image,
+              width: 130,
+              height: 130,
+              fit: BoxFit.cover,
             ),
-          ),
-        ),
 
-        body: Center(
-          child: Card(
-            margin: const EdgeInsets.all(25),
-            elevation: 8,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+            const SizedBox(height: 15),
+
+            // NAME
+            Text(
+              profile.name ?? 'Name: Missing',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent,
+              ),
+              textAlign: TextAlign.center,
             ),
 
-            child: Padding(
-              padding: const EdgeInsets.all(30),
+            const SizedBox(height: 8),
 
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+            // COURSE & SECTION
+            Text(
+              profile.courseSection == null
+                  ? 'Course & Section: Missing'
+                  : 'Course & Section: ${profile.courseSection}',
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.blueAccent,
+              ),
+              textAlign: TextAlign.center,
+            ),
 
-                  // Heart icon
-                  const Icon(
-                    Icons.favorite,
-                    size: 70,
-                    color: Colors.lightBlue,
-                  ),
+            const SizedBox(height: 8),
 
-                  const SizedBox(height: 20),
-
-                  // Circular profile picture
-                  Container(
-                    width: 160,
-                    height: 160,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.lightBlue,
-                        width: 5,
-                      ),
-                    ),
-
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/dog.webp',
-                        width: 150,
-                        height: 150,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Name
-                  const Text(
-                    'Mary Jocelyn Syllanto',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // Course
-                  const Text(
-                    'BSIT 3',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Application title
-                  const Text(
-                    'My First Flutter Application',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  // Date
-                  const Text(
-                    'August 11, 2026',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                ],
+            // AGE
+            Text(
+              profile.age == null
+                  ? 'Age: Missing'
+                  : 'Age: ${profile.age}',
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.blueAccent,
               ),
             ),
-          ),
+
+            const SizedBox(height: 8),
+
+            // HOBBY
+            Text(
+              profile.hobby == null
+                  ? 'Hobby: Missing'
+                  : profile.hobby!.isEmpty
+                      ? 'Hobby: Empty'
+                      : 'Hobby: ${profile.hobby}',
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.blueAccent,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
