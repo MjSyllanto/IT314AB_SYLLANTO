@@ -140,7 +140,7 @@ class ProfileCard extends StatelessWidget {
 
             // NAME
             Text(
-              profile.name ?? 'Name: Missing',
+              profile.name ?? 'Name: Not specified',
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -153,9 +153,7 @@ class ProfileCard extends StatelessWidget {
 
             // COURSE & SECTION
             Text(
-              profile.courseSection == null
-                  ? 'Course & Section: Missing'
-                  : 'Course & Section: ${profile.courseSection}',
+              profile.courseSection ?? 'Course & Section: Not specified',
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.blueAccent,
@@ -167,9 +165,7 @@ class ProfileCard extends StatelessWidget {
 
             // AGE
             Text(
-              profile.age == null
-                  ? 'Age: Missing'
-                  : 'Age: ${profile.age}',
+              profile.age?.toString() ?? "Age: Not specified",
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.blueAccent,
@@ -180,11 +176,7 @@ class ProfileCard extends StatelessWidget {
 
             // HOBBY
             Text(
-              profile.hobby == null
-                  ? 'Hobby: Missing'
-                  : profile.hobby!.isEmpty
-                      ? 'Hobby: Empty'
-                      : 'Hobby: ${profile.hobby}',
+              profile.hobby ?? "Hobby: Not specified",
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.blueAccent,
