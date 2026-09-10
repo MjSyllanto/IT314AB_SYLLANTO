@@ -26,3 +26,10 @@ flutter:
 
   assets:
     - assets/dog.webp
+    - assets/chim.PNG
+    - assets/krylle.PNG
+    - assets/marianne.JPG
+    - assets/mav1.JPG
+    - assets/jolya.JPG
+    
+  
