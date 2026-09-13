@@ -27,8 +27,10 @@ class Student {
   final String studentId;
   final String email;
   final String favoriteSubject;
+  bool isPressed = false;
+  bool isFavorite = false;
 
-  const Student({
+  Student({
     required this.image,
     required this.name,
     required this.course,
@@ -41,7 +43,7 @@ class Student {
   });
 }
 
-const List<Student> students = [
+List<Student> students = [
   Student(
     image: 'assets/dog.webp',
     name: 'Mary Jocelyn Syllanto',
@@ -110,11 +112,25 @@ const List<Student> students = [
   ),
 ];
 
-final List<Student> sortedStudents = List<Student>.from(students)
+List<Student> sortedStudents = List<Student>.from(students)
   ..sort((a, b) => a.name.compareTo(b.name));
 
-class StudentListPage extends StatelessWidget {
+class StudentListPage extends StatefulWidget {
   const StudentListPage({super.key});
+
+  @override
+  State<StudentListPage> createState() => _StudentListPageState();
+}
+
+class _StudentListPageState extends State<StudentListPage> {
+  void showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 10),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +143,6 @@ class StudentListPage extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-
       body: sortedStudents.isEmpty
           ? const Center(
               child: Text(
@@ -145,61 +160,193 @@ class StudentListPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final student = sortedStudents[index];
 
-                return Card(
-                  color: Colors.white.withOpacity(0.3),
-                  elevation: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 50),
+                return GestureDetector(
+                  onTap: () {
+                    showMessage('Student Card tapped: ${student.name}');
+                    debugPrint('Student Card tapped: ${student.name}');
+                  },
+                  child: Card(
+                    color: student.isFavorite
+                        ? Colors.red[100]
+                        : Colors.white,
+                    elevation: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 50),
 
-                        Image.asset(student.image, width: 130),
+                          Image.asset(student.image, width: 130),
 
-                        const SizedBox(height: 30),
+                          const SizedBox(height: 30),
 
-                        Text(
-                          student.name,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                          Text(
+                            student.name,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ), // Text
 
-                        const SizedBox(height: 10),
+                          const SizedBox(height: 10),
 
-                        Text(student.course, style: const TextStyle(fontSize: 18)),
+                          Text(
+                            student.course,
+                            style: const TextStyle(fontSize: 18),
+                          ),
 
-                        const SizedBox(height: 10),
+                          const SizedBox(height: 10),
 
-                        Text(student.yearLevel, style: const TextStyle(fontSize: 18)),
+                          Text(
+                            student.yearLevel,
+                            style: const TextStyle(fontSize: 18),
+                          ),
 
-                        const SizedBox(height: 10),
+                          const SizedBox(height: 10),
 
-                        Text('Age: ${student.age}', style: const TextStyle(fontSize: 18)),
+                          Text(
+                            'Age: ${student.age}',
+                            style: const TextStyle(fontSize: 18),
+                          ),
 
-                        const SizedBox(height: 10),
+                          const SizedBox(height: 10),
 
-                        Text('Hobby: ${student.hobby}', style: const TextStyle(fontSize: 18)),
+                          Text(
+                            'Hobby: ${student.hobby}',
+                            style: const TextStyle(fontSize: 18),
+                          ),
 
-                        const SizedBox(height: 10),
+                          const SizedBox(height: 10),
 
-                        Text('ID: ${student.studentId}', style: const TextStyle(fontSize: 18)),
+                          Text(
+                            'Student ID: ${student.studentId}',
+                            style: const TextStyle(fontSize: 18),
+                          ),
 
-                        const SizedBox(height: 10),
+                          const SizedBox(height: 10),
 
-                        Text(student.email, style: const TextStyle(fontSize: 18)),
+                          Text(
+                            'Email: ${student.email}',
+                            style: const TextStyle(fontSize: 18),
+                          ),
 
-                        const SizedBox(height: 10),
+                          const SizedBox(height: 10),
 
-                        Text('Favorite Subject: ${student.favoriteSubject}', style: const TextStyle(fontSize: 18)),
+                          Text(
+                            'Favorite Subject: ${student.favoriteSubject}',
+                            style: const TextStyle(fontSize: 18),
+                          ),
 
-                        const SizedBox(height: 50),
-                      ],
-                    ), // Column
-                  ), // Padding
-                ); // Card
+                          const SizedBox(height: 15),
+
+                          Text(
+                            student.isPressed
+                                ? 'Button Status: Button Pressed'
+                                : 'Button Status: Not Pressed',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    student.isFavorite = !student.isFavorite;
+                                    student.isPressed = true;
+                                  });
+
+                                  showMessage(
+                                    'Favorite button pressed for ${student.name}',
+                                  );
+
+                                  debugPrint(
+                                    'Favorite button pressed for '
+                                    '${student.name}',
+                                  );
+                                },
+                                child: Icon(
+                                  student.isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                ),
+                              ),
+
+                              const SizedBox(width: 10),
+
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    student.isPressed = true;
+                                  });
+
+                                  showMessage(
+                                    'Edit button pressed for ${student.name}',
+                                  );
+
+                                  debugPrint(
+                                    'Edit button pressed for '
+                                    '${student.name}',
+                                  );
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          'Edit Student ${student.name}',
+                                        ),
+                                        content: const Text(
+                                          'Want to edit something?',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Close'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: const Text('Edit'),
+                              ),
+
+                              const SizedBox(width: 10),
+
+                              ElevatedButton(
+                                onPressed: () {
+                                  showMessage(
+                                    'Deleted student: ${student.name}',
+                                  );
+
+                                  debugPrint(
+                                    'Deleted student: ${student.name}',
+                                  );
+
+                                  setState(() {
+                                    sortedStudents.removeAt(index);
+                                  });
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 50),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
               },
             ),
     );
