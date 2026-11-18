@@ -1,5 +1,7 @@
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Student {
   final String image;
@@ -27,6 +29,43 @@ class Student {
     required this.favoriteSubject,
     required this.active,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'image': image,
+      'name': name,
+      'course': course,
+      'yearLevel': yearLevel,
+      'age': age,
+      'hobby': hobby,
+      'studentId': studentId,
+      'email': email,
+      'favoriteSubject': favoriteSubject,
+      'active': active,
+      'isFavorite': isFavorite,
+      'isPressed': isPressed,
+    };
+  }
+
+  factory Student.fromJson(Map<String, dynamic> json) {
+    Student student = Student(
+      image: json['image'] ?? '',
+      name: json['name'] ?? '',
+      course: json['course'] ?? '',
+      yearLevel: json['yearLevel'] ?? '',
+      age: json['age'] ?? 0,
+      hobby: json['hobby'] ?? 'Not specified',
+      studentId: json['studentId'] ?? '',
+      email: json['email'] ?? '',
+      favoriteSubject: json['favoriteSubject'] ?? 'Not specified',
+      active: json['active'] ?? true,
+    );
+
+    student.isFavorite = json['isFavorite'] ?? false;
+    student.isPressed = json['isPressed'] ?? false;
+
+    return student;
+  }
 }
 
 List<Student> students = [
@@ -107,6 +146,33 @@ List<Student> students = [
 List<Student> sortedStudents = List<Student>.from(students)
   ..sort((a, b) => a.name.compareTo(b.name));
 
+Future<void> saveStudents() async {
+  final prefs = await SharedPreferences.getInstance();
+
+  List<String> studentList = students
+      .map((student) => jsonEncode(student.toJson()))
+      .toList();
+
+  await prefs.setStringList('students', studentList);
+}
+
+Future<void> loadStudents() async {
+  final prefs = await SharedPreferences.getInstance();
+
+  if (prefs.containsKey('students')) {
+    List<String> savedStudents = prefs.getStringList('students') ?? [];
+
+    students = savedStudents.map((student) {
+      return Student.fromJson(jsonDecode(student));
+    }).toList();
+  } else {
+    await saveStudents();
+  }
+
+  sortedStudents = List<Student>.from(students)
+    ..sort((a, b) => a.name.compareTo(b.name));
+}
+
 class StudentListScreen extends StatefulWidget {
   const StudentListScreen({super.key});
 
@@ -121,13 +187,18 @@ class _StudentListScreenState extends State<StudentListScreen> {
   @override
   void initState() {
     super.initState();
+    initializeStudents();
+  }
 
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!mounted) return;
+  Future<void> initializeStudents() async {
+    await loadStudents();
 
-      setState(() {
-        isLoading = false;
-      });
+    await Future.delayed(const Duration(seconds: 3));
+
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = false;
     });
   }
 
@@ -135,14 +206,13 @@ class _StudentListScreenState extends State<StudentListScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        duration: const Duration(seconds: 10),
+        duration: const Duration(seconds: 5),
       ),
     );
   }
 
-  // NAMED ROUTE: OPEN STUDENT DETAILS
-  void openStudentDetails(Student student) {
-    Navigator.pushNamed(
+  Future<void> openStudentDetails(Student student) async {
+    final result = await Navigator.pushNamed(
       context,
       '/student-details',
       arguments: {
@@ -182,6 +252,8 @@ class _StudentListScreenState extends State<StudentListScreen> {
               (a, b) => a.name.compareTo(b.name),
             );
           });
+
+          saveStudents();
         },
       },
     );
@@ -199,8 +271,15 @@ class _StudentListScreenState extends State<StudentListScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/add-student');
+            onPressed: () async {
+              final result = await Navigator.pushNamed(
+                context,
+                '/add-student',
+              );
+
+              if (result == true) {
+                setState(() {});
+              }
             },
             icon: const Icon(
               Icons.add,
@@ -284,11 +363,25 @@ class _StudentListScreenState extends State<StudentListScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const SizedBox(height: 50),
+                              const SizedBox(height: 10),
 
-                              Image.asset(
-                                student.image,
-                                width: 130,
+                              CircleAvatar(
+                                radius: 65,
+                                backgroundColor: Colors.grey[300],
+                                child: student.image.isEmpty
+                                    ? const Icon(
+                                        Icons.person,
+                                        size: 70,
+                                        color: Colors.white,
+                                      )
+                                    : ClipOval(
+                                        child: Image.asset(
+                                          student.image,
+                                          width: 130,
+                                          height: 130,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                               ),
 
                               const SizedBox(height: 30),
@@ -436,6 +529,8 @@ class _StudentListScreenState extends State<StudentListScreen> {
                                             !student.isFavorite;
                                       });
 
+                                      saveStudents();
+
                                       showMessage(
                                         'Favorite button pressed for ${student.name}',
                                       );
@@ -461,6 +556,8 @@ class _StudentListScreenState extends State<StudentListScreen> {
                                       setState(() {
                                         student.isPressed = true;
                                       });
+
+                                      saveStudents();
 
                                       showMessage(
                                         'Edit button pressed for ${student.name}',
@@ -489,14 +586,17 @@ class _StudentListScreenState extends State<StudentListScreen> {
 
                                       setState(() {
                                         sortedStudents.removeAt(index);
+                                        students.remove(student);
                                       });
+
+                                      saveStudents();
                                     },
                                     child: const Text('Delete'),
                                   ),
                                 ],
                               ),
 
-                              const SizedBox(height: 50),
+                              const SizedBox(height: 10),
                             ],
                           ),
                         ),
