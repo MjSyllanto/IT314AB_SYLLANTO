@@ -1,10 +1,6 @@
-
 name: my_first_flutter_project_emji
-
 description: "A new Flutter project."
-
 publish_to: 'none'
-
 version: 1.0.0+1
 
 environment:
@@ -16,6 +12,9 @@ dependencies:
 
   shared_preferences: ^2.5.3
   cupertino_icons: ^1.0.8
+  postgres: ^3.6.0
+  flutter_dotenv: ^6.0.2
+  provider: ^6.1.5+1
 
 dev_dependencies:
   flutter_test:
@@ -33,3 +32,4 @@ flutter:
     - assets/marianne.JPG
     - assets/mav1.JPG
     - assets/jolya.JPG
+    - .env

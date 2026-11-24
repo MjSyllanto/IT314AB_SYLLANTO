@@ -1,11 +1,26 @@
-
 import 'package:flutter/material.dart';
-import 'student_list_screen.dart';
-import 'student_details_screen.dart';
-import 'add_student_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
+import 'viewmodels/enrollment_viewmodel.dart';
+import 'viewmodels/grade_viewmodel.dart';
+import 'viewmodels/schedule_viewmodel.dart';
+import 'viewmodels/student_viewmodel.dart';
+import 'viewmodels/subject_viewmodel.dart';
+import 'views/home_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => StudentViewModel()..load()),
+      ChangeNotifierProvider(create: (_) => SubjectViewModel()..load()),
+      ChangeNotifierProvider(create: (_) => ScheduleViewModel()),
+      ChangeNotifierProvider(create: (_) => EnrollmentViewModel()),
+      ChangeNotifierProvider(create: (_) => GradeViewModel()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,48 +29,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Student Enrollment System',
       debugShowCheckedModeBanner: false,
-      title: 'Student List',
-      initialRoute: '/student-list',
-      routes: {
-        '/student-list': (context) => const StudentListScreen(),
-        '/add-student': (context) => const AddStudentScreen(),
-      },
-      onGenerateRoute: (settings) {
-        if (settings.name == '/student-details') {
-          final arguments =
-              settings.arguments as Map<String, dynamic>;
-
-          return MaterialPageRoute(
-            builder: (context) => StudentDetailsScreen(
-              image: arguments['image'],
-              name: arguments['name'],
-              course: arguments['course'],
-              yearLevel: arguments['yearLevel'],
-              age: arguments['age'],
-              hobby: arguments['hobby'],
-              studentId: arguments['studentId'],
-              email: arguments['email'],
-              favoriteSubject: arguments['favoriteSubject'],
-              active: arguments['active'],
-              isFavorite: arguments['isFavorite'],
-              isPressed: arguments['isPressed'],
-              onSave: arguments['onSave'] as Function(
-                String,
-                String,
-                String,
-                String,
-                int,
-                String,
-                String,
-                String,
-              ),
-            ),
-          );
-        }
-
-        return null;
-      },
+      theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
+      home: const HomeScreen(),
     );
   }
 }
